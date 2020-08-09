@@ -6,8 +6,8 @@ function pseudo_likelihood(m::erg)
     X = Array{Float64}(undef, n * (n - 1), m.n_funcs)
     y = Array{Bool,1}(undef, n * (n - 1))
     counter = 1
-    for i in 1:n
-        for j in 1:n
+    for j in 1:n
+        for i in 1:n
             i == j && continue
             y[counter] = m.m[i,j]
             if !has_edge(m, i, j)
