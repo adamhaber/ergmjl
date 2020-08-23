@@ -403,3 +403,32 @@ function rgraph(
         return x, toggled
     end
 end
+
+function rgraphs(
+    theta::Vector{Float64},
+    g::E,
+    K::Int64,
+    N::Int64
+) where {E <: AbstractGraph}
+    n = nv(g)
+    g2 = deepcopy(g)
+    graphs = Any[]
+    for n_samp = 1:N
+        @inbounds for k = 1:K
+            for j = 1:n
+                for i = 1:n
+                    if i == j
+                        continue
+                    else
+                        deltastats = change_scores(g2, i, j)
+                        if log(rand()) < dot(theta, deltastats)
+                            edge_toggle!(g2, i, j)
+                        end
+                    end
+                end
+            end
+        end
+        push!(graphs, deepcopy(g2))
+    end
+    return graphs
+end
